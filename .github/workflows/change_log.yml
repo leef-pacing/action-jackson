@@ -1,4 +1,4 @@
-name: Update CHANGELOG Date
+name: Update CHANGELOG
 
 on:
   workflow_dispatch:
@@ -17,10 +17,13 @@ jobs:
         with:
           persist-credentials: true
 
-      - name: Add date to CHANGELOG
+      - name: Add to CHANGELOG
         run: |
           TODAY=$(date +'%Y-%m-%d')
-          echo "## $TODAY" | cat - CHANGELOG.md > temp.md
+          # Get latest commit message and branch info
+          LATEST_COMMIT=$(git log -1 --pretty=format:"%h - %s (%an)")
+          # Prepend to CHANGELOG.md
+          echo "## $TODAY - $LATEST_COMMIT" | cat - CHANGELOG.md > temp.md
           mv temp.md CHANGELOG.md
 
       - name: Commit CHANGELOG
